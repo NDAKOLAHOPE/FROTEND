@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  color-scheme: light dark;
+  color-scheme: dark;
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   text-rendering: geometricPrecision;
   -webkit-font-smoothing: antialiased;
@@ -16,6 +16,21 @@ body,
 
 body {
   margin: 0;
+  background:
+    radial-gradient(1200px 600px at -10% -20%, rgba(56, 189, 248, 0.18), transparent 60%),
+    radial-gradient(900px 500px at 110% -10%, rgba(129, 140, 248, 0.22), transparent 50%),
+    linear-gradient(180deg, #f7f9ff 0%, #eef2ff 45%, #f8fafc 100%);
+}
+
+html.dark body {
+  background:
+    radial-gradient(1200px 650px at -10% -20%, rgba(56, 189, 248, 0.14), transparent 60%),
+    radial-gradient(900px 500px at 110% -10%, rgba(129, 140, 248, 0.18), transparent 50%),
+    linear-gradient(180deg, #020617 0%, #0b1223 50%, #020617 100%);
+}
+
+.app-bg {
+  background: transparent;
 }
 
 /* Better defaults */

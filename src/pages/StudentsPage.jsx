@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { http } from '../api/http.js';
 import { useAuth } from '../auth/AuthContext.jsx';
 
@@ -7,6 +7,7 @@ export default function StudentsPage() {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [editingStudentId, setEditingStudentId] = useState(null);
 
   const canManage = role === 'ADMIN' || role === 'TEACHER';
 
@@ -22,14 +23,35 @@ export default function StudentsPage() {
   const [progressNote, setProgressNote] = useState('');
   const [progressStudentId, setProgressStudentId] = useState('');
   const [progressError, setProgressError] = useState(null);
+  const [editingProgressId, setEditingProgressId] = useState(null);
+
+  const studentsUrl = role === 'PARENT' ? '/students/my' : '/students';
+
+  const reloadStudents = async () => {
+    const res = await http.get(studentsUrl);
+    setStudents(res.data);
+  };
+
+  const reloadProgress = async () => {
+    if (role === 'PARENT') {
+      const res = await http.get('/progress/my');
+      setProgressItems(res.data);
+      return;
+    }
+    if (!progressStudentId) {
+      setProgressItems([]);
+      return;
+    }
+    const res = await http.get(`/progress?studentId=${encodeURIComponent(progressStudentId)}`);
+    setProgressItems(res.data);
+  };
 
   useEffect(() => {
     let alive = true;
     (async () => {
       try {
         setLoading(true);
-        const url = role === 'PARENT' ? '/students/my' : '/students';
-        const res = await http.get(url);
+        const res = await http.get(studentsUrl);
         if (!alive) return;
         setStudents(res.data);
       } catch (e) {
@@ -42,7 +64,7 @@ export default function StudentsPage() {
     return () => {
       alive = false;
     };
-  }, [role]);
+  }, [studentsUrl]);
 
   useEffect(() => {
     if (!progressStudentId && students.length > 0) {
@@ -56,23 +78,7 @@ export default function StudentsPage() {
       try {
         setProgressLoading(true);
         setProgressError(null);
-
-        if (role === 'PARENT') {
-          const res = await http.get('/progress/my');
-          if (!alive) return;
-          setProgressItems(res.data);
-          return;
-        }
-
-        if (!progressStudentId) {
-          if (!alive) return;
-          setProgressItems([]);
-          return;
-        }
-
-        const res = await http.get(`/progress?studentId=${encodeURIComponent(progressStudentId)}`);
-        if (!alive) return;
-        setProgressItems(res.data);
+        if (alive) await reloadProgress();
       } catch (e) {
         if (!alive) return;
         setProgressError(e?.response?.data?.message ?? e?.message ?? 'Erreur');
@@ -80,7 +86,6 @@ export default function StudentsPage() {
         if (alive) setProgressLoading(false);
       }
     })();
-
     return () => {
       alive = false;
     };
@@ -89,20 +94,15 @@ export default function StudentsPage() {
   const submitProgress = async () => {
     setProgressError(null);
     try {
-      await http.post('/progress', {
-        studentId: Number(progressStudentId),
-        note: progressNote,
-      });
-      setProgressNote('');
-
-      // reload
-      if (role === 'PARENT') {
-        const res = await http.get('/progress/my');
-        setProgressItems(res.data);
+      const payload = { studentId: Number(progressStudentId), note: progressNote };
+      if (editingProgressId) {
+        await http.patch(`/progress/${editingProgressId}`, payload);
       } else {
-        const res = await http.get(`/progress?studentId=${encodeURIComponent(progressStudentId)}`);
-        setProgressItems(res.data);
+        await http.post('/progress', payload);
       }
+      setProgressNote('');
+      setEditingProgressId(null);
+      await reloadProgress();
     } catch (e) {
       setProgressError(e?.response?.data?.message ?? e?.message ?? 'Erreur');
     }
@@ -111,17 +111,56 @@ export default function StudentsPage() {
   const submitCreate = async (e) => {
     e.preventDefault();
     try {
-      await http.post('/students', {
+      const payload = {
         firstName: form.firstName,
         lastName: form.lastName,
-        dob: form.dob ? form.dob : undefined,
-        className: form.className ? form.className : undefined,
-      });
+        dob: form.dob || undefined,
+        className: form.className || undefined,
+      };
+      if (editingStudentId) {
+        await http.patch(`/students/${editingStudentId}`, payload);
+      } else {
+        await http.post('/students', payload);
+      }
       setForm({ firstName: '', lastName: '', dob: '', className: '' });
-      const res = await http.get(role === 'PARENT' ? '/students/my' : '/students');
-      setStudents(res.data);
+      setEditingStudentId(null);
+      await reloadStudents();
     } catch (e2) {
       setError(e2?.response?.data?.message ?? e2?.message ?? 'Erreur');
+    }
+  };
+
+  const startEditStudent = (student) => {
+    setEditingStudentId(student.id);
+    setForm({
+      firstName: student.firstName ?? '',
+      lastName: student.lastName ?? '',
+      dob: student.dob ? new Date(student.dob).toISOString().slice(0, 10) : '',
+      className: student.className ?? '',
+    });
+  };
+
+  const removeStudent = async (id) => {
+    try {
+      await http.delete(`/students/${id}`);
+      await reloadStudents();
+    } catch (e) {
+      setError(e?.response?.data?.message ?? e?.message ?? 'Erreur');
+    }
+  };
+
+  const startEditProgress = (item) => {
+    setEditingProgressId(item.id);
+    setProgressStudentId(String(item.studentId));
+    setProgressNote(item.note ?? '');
+  };
+
+  const removeProgress = async (id) => {
+    try {
+      await http.delete(`/progress/${id}`);
+      await reloadProgress();
+    } catch (e) {
+      setProgressError(e?.response?.data?.message ?? e?.message ?? 'Erreur');
     }
   };
 
@@ -129,13 +168,15 @@ export default function StudentsPage() {
     <div className="space-y-4">
       <div>
         <h2 className="text-2xl font-semibold">Students</h2>
-        <p className="text-sm text-slate-600 dark:text-slate-300">CRUD + parent assignment</p>
+        <p className="text-sm text-slate-600 dark:text-slate-300">
+          Gestion complete des etudiants et notes de progression
+        </p>
       </div>
 
       {canManage && (
         <form
           onSubmit={submitCreate}
-          className="rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900"
+          className="rounded-2xl border border-slate-200 bg-white/85 p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900/80"
         >
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <label className="block">
@@ -175,18 +216,32 @@ export default function StudentsPage() {
               />
             </label>
           </div>
-          <button className="mt-4 rounded-lg bg-indigo-600 px-4 py-2 text-white text-sm font-medium">
-            Create student
-          </button>
+          <div className="mt-4 flex gap-2">
+            <button className="rounded-lg bg-indigo-600 px-4 py-2 text-white text-sm font-medium">
+              {editingStudentId ? 'Update student' : 'Create student'}
+            </button>
+            {editingStudentId && (
+              <button
+                type="button"
+                className="rounded-lg bg-slate-200 px-4 py-2 text-sm font-medium dark:bg-slate-800"
+                onClick={() => {
+                  setEditingStudentId(null);
+                  setForm({ firstName: '', lastName: '', dob: '', className: '' });
+                }}
+              >
+                Cancel
+              </button>
+            )}
+          </div>
         </form>
       )}
 
       {error && <div className="text-red-600 text-sm">{error}</div>}
 
       {loading ? (
-        <div className="text-sm text-slate-600 dark:text-slate-300">Loading…</div>
+        <div className="text-sm text-slate-600 dark:text-slate-300">Loading...</div>
       ) : (
-        <div className="rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900 overflow-x-auto">
+        <div className="rounded-2xl border border-slate-200 bg-white/85 dark:border-slate-800 dark:bg-slate-900/80 overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead className="border-b border-slate-200 dark:border-slate-800">
               <tr>
@@ -194,20 +249,43 @@ export default function StudentsPage() {
                 <th className="p-3">Name</th>
                 <th className="p-3">DOB</th>
                 <th className="p-3">Class</th>
+                {canManage && <th className="p-3">Actions</th>}
               </tr>
             </thead>
             <tbody>
               {students.map((s) => (
                 <tr key={s.id} className="border-b border-slate-100 dark:border-slate-800">
                   <td className="p-3 font-medium">{s.id}</td>
-                  <td className="p-3">{s.firstName} {s.lastName}</td>
-                  <td className="p-3">{s.dob ? new Date(s.dob).toLocaleDateString() : '—'}</td>
-                  <td className="p-3">{s.className ?? '—'}</td>
+                  <td className="p-3">
+                    {s.firstName} {s.lastName}
+                  </td>
+                  <td className="p-3">{s.dob ? new Date(s.dob).toLocaleDateString() : '-'}</td>
+                  <td className="p-3">{s.className ?? '-'}</td>
+                  {canManage && (
+                    <td className="p-3">
+                      <div className="flex gap-2">
+                        <button
+                          type="button"
+                          className="px-3 py-1 rounded-md bg-indigo-600 text-white text-xs"
+                          onClick={() => startEditStudent(s)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          className="px-3 py-1 rounded-md bg-rose-600 text-white text-xs"
+                          onClick={() => removeStudent(s.id)}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  )}
                 </tr>
               ))}
               {students.length === 0 && (
                 <tr>
-                  <td className="p-3 text-slate-600" colSpan="4">
+                  <td className="p-3 text-slate-600" colSpan={canManage ? 5 : 4}>
                     No students yet.
                   </td>
                 </tr>
@@ -217,15 +295,10 @@ export default function StudentsPage() {
         </div>
       )}
 
-      {/* Progress notes */}
-      <div className="rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900 space-y-3">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <div className="text-lg font-semibold">Progress notes</div>
-            <div className="text-sm text-slate-600 dark:text-slate-300">
-              Suivi de l'évolution (progress)
-            </div>
-          </div>
+      <div className="rounded-2xl border border-slate-200 bg-white/85 p-4 dark:border-slate-800 dark:bg-slate-900/80 space-y-3">
+        <div>
+          <div className="text-lg font-semibold">Progress notes</div>
+          <div className="text-sm text-slate-600 dark:text-slate-300">Suivi de l'evolution</div>
         </div>
 
         {progressError && <div className="text-red-600 text-sm">{progressError}</div>}
@@ -253,37 +326,65 @@ export default function StudentsPage() {
               className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 min-h-[80px] dark:border-slate-800 dark:bg-slate-950"
               value={progressNote}
               onChange={(e) => setProgressNote(e.target.value)}
-              placeholder="Ex: Amélioration sur le trimestre, objectif atteint..."
+              placeholder="Ex: progression en lecture"
             />
           </label>
 
-          <button
-            type="button"
-            onClick={submitProgress}
-            className="rounded-lg bg-indigo-600 px-4 py-2 text-white text-sm font-medium"
-            disabled={students.length === 0 || !progressNote.trim() || !progressStudentId}
-          >
-            Save progress
-          </button>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={submitProgress}
+              className="rounded-lg bg-indigo-600 px-4 py-2 text-white text-sm font-medium"
+              disabled={students.length === 0 || !progressNote.trim() || !progressStudentId}
+            >
+              {editingProgressId ? 'Update progress' : 'Save progress'}
+            </button>
+            {editingProgressId && (
+              <button
+                type="button"
+                className="rounded-lg bg-slate-200 px-4 py-2 text-sm font-medium dark:bg-slate-800"
+                onClick={() => {
+                  setEditingProgressId(null);
+                  setProgressNote('');
+                }}
+              >
+                Cancel
+              </button>
+            )}
+          </div>
         </div>
 
         <div className="pt-2">
           {progressLoading ? (
-            <div className="text-sm text-slate-600 dark:text-slate-300">Loading…</div>
+            <div className="text-sm text-slate-600 dark:text-slate-300">Loading...</div>
           ) : progressItems.length === 0 ? (
             <div className="text-sm text-slate-600 dark:text-slate-300">No progress notes.</div>
           ) : (
             <div className="space-y-2">
               {progressItems.slice(0, 10).map((p) => (
-                <div
-                  key={p.id}
-                  className="rounded-lg border border-slate-200 p-3 dark:border-slate-800"
-                >
+                <div key={p.id} className="rounded-lg border border-slate-200 p-3 dark:border-slate-800">
                   <div className="text-xs text-slate-500 dark:text-slate-400">
-                    Student #{p.studentId} •{' '}
-                    {p.createdAt ? new Date(p.createdAt).toLocaleString() : '—'}
+                    Student #{p.studentId} - {p.createdAt ? new Date(p.createdAt).toLocaleString() : '-'}
                   </div>
-                  <div className="mt-1 text-sm whitespace-pre-wrap">{p.note ?? '—'}</div>
+                  <div className="mt-1 text-sm whitespace-pre-wrap">{p.note ?? '-'}</div>
+                  {canManage && (
+                    <div className="mt-2 flex gap-2">
+                      <button
+                        type="button"
+                        className="px-3 py-1 rounded-md bg-indigo-600 text-white text-xs"
+                        onClick={() => startEditProgress(p)}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        type="button"
+                        className="px-3 py-1 rounded-md bg-rose-600 text-white text-xs"
+                        onClick={() => removeProgress(p.id)}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -293,4 +394,3 @@ export default function StudentsPage() {
     </div>
   );
 }
-

@@ -8,7 +8,7 @@ export default function PageShell({ children }) {
   const { user, role, logout } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const [theme, setTheme] = useState(() => localStorage.getItem('theme') ?? 'light');
+  const [theme, setTheme] = useState(() => localStorage.getItem('theme') ?? 'dark');
   useEffect(() => {
     const root = document.documentElement;
     if (theme === 'dark') root.classList.add('dark');
@@ -17,7 +17,7 @@ export default function PageShell({ children }) {
   }, [theme]);
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+    <div className="min-h-screen app-bg text-slate-900 dark:text-slate-100">
       <div className="lg:flex">
         <aside className="hidden lg:block lg:w-72 lg:border-r lg:border-slate-200/70 lg:bg-white/70 lg:backdrop-blur dark:lg:border-slate-800/70 dark:lg:bg-slate-900/40">
           <div className="h-full p-4">
@@ -51,14 +51,14 @@ export default function PageShell({ children }) {
         </div>
 
         <div className="flex-1">
-          <header className="sticky top-0 z-30 bg-white/70 backdrop-blur border-b border-slate-200/70 dark:bg-slate-950/40 dark:border-slate-800/70">
+          <header className="sticky top-0 z-30 bg-white/60 backdrop-blur border-b border-slate-200/70 dark:bg-slate-950/40 dark:border-slate-800/70">
             <div className="flex items-center justify-between px-4 py-3 lg:px-8">
               <div className="flex items-center gap-3">
                 <Button variant="soft" className="lg:hidden" onClick={() => setMobileOpen(true)}>
                   Menu
                 </Button>
                 <div>
-                  <div className="text-sm font-semibold">Dashboard</div>
+                  <div className="text-sm font-semibold">School App</div>
                   <div className="text-xs text-slate-500 dark:text-slate-400">{user?.email ?? '—'}</div>
                 </div>
               </div>
