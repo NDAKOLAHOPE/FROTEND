@@ -45,3 +45,74 @@ textarea {
 :focus {
   outline: none;
 }
+
+/* Smooth transitions for all interactive elements */
+* {
+  transition-property: background-color, border-color, color, transform, box-shadow, opacity;
+  transition-duration: 200ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Card hover effect */
+.card-hover {
+  position: relative;
+  overflow: hidden;
+}
+
+.card-hover::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  transition: left 0.5s;
+}
+
+.card-hover:hover::before {
+  left: 100%;
+}
+
+/* Table row hover */
+.table-row-hover {
+  position: relative;
+}
+
+.table-row-hover::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #4f46e5, transparent);
+  transition: all 0.3s;
+  transform: translateX(-50%);
+}
+
+.table-row-hover:hover::after {
+  width: 80%;
+}
+
+/* Button shimmer effect */
+.btn-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shimmer::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -60%;
+  width: 20px;
+  height: 200%;
+  background: rgba(255,255,255,0.2);
+  transform: rotate(25deg);
+  transition: left 0.6s;
+}
+
+.btn-shimmer:hover::after {
+  left: 120%;
+}

@@ -39,7 +39,7 @@ export default function LoginPage() {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
       <div className="mx-0 w-full px-4 py-10 sm:px-6 lg:px-10">
         <div className="w-full max-w-md mx-auto">
-          <Card className="p-6 sm:p-7">
+          <Card className="p-6 sm:p-7 transition-all duration-300 hover:shadow-xl">
             <div className="flex items-center justify-between gap-3">
               <div>
                 <h2 className="text-xl font-bold tracking-tight">{title}</h2>

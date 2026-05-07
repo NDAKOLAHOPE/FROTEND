@@ -19,7 +19,7 @@ export default function PageShell({ children }) {
     <div className="min-h-screen app-bg text-slate-900 dark:text-slate-100">
       <div className="lg:flex">
         {/* Desktop Sidebar */}
-        <aside className="hidden lg:block lg:w-64 lg:sticky lg:top-0 lg:h-screen lg:border-r lg:border-brand-200/40 lg:bg-gradient-to-b lg:from-brand-50/80 lg:to-white/60 lg:backdrop-blur dark:lg:border-brand-900/30 dark:lg:from-slate-900/60 dark:lg:to-slate-950/40">
+        <aside className="hidden lg:block lg:w-64 lg:sticky lg:top-0 lg:h-screen bg-gradient-to-b from-brand-50/60 via-white/40 to-transparent dark:from-slate-900/40 dark:via-slate-950/40 dark:to-transparent backdrop-blur-xl">
           <div className="h-full p-6 flex flex-col">
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-1">
@@ -33,7 +33,7 @@ export default function PageShell({ children }) {
             <div className="flex-1">
               <Sidebar role={role} onNavigate={() => {}} />
             </div>
-            <div className="pt-4 border-t border-brand-200/30 dark:border-brand-900/20">
+            <div className="pt-4 mt-2 hover:bg-brand-50/50 dark:hover:bg-slate-800/50 px-3 py-2.5 rounded-xl transition-all duration-300 cursor-pointer">
               <div className="text-xs text-slate-500 dark:text-slate-400 truncate">{user?.email}</div>
             </div>
           </div>
@@ -47,8 +47,8 @@ export default function PageShell({ children }) {
           />
           <div
             className={mobileOpen
-              ? 'fixed left-0 top-0 z-50 h-full w-72 bg-gradient-to-b from-brand-50/95 to-white/95 dark:from-slate-900/95 dark:to-slate-950/95 p-6 border-r border-brand-200/40 dark:border-brand-900/30 backdrop-blur-xl transition-transform duration-300'
-              : 'fixed left-0 top-0 z-50 h-full w-72 bg-gradient-to-b from-brand-50/95 to-white/95 dark:from-slate-900/95 dark:to-slate-950/95 p-6 border-r border-brand-200/40 dark:border-brand-900/30 -translate-x-full transition-transform backdrop-blur-xl'
+              ? 'fixed left-0 top-0 z-50 h-full w-72 bg-gradient-to-b from-brand-50/95 to-white/95 dark:from-slate-900/95 dark:to-slate-950/95 p-6 backdrop-blur-xl transition-transform duration-300'
+              : 'fixed left-0 top-0 z-50 h-full w-72 bg-gradient-to-b from-brand-50/95 to-white/95 dark:from-slate-900/95 dark:to-slate-950/95 p-6 -translate-x-full transition-transform backdrop-blur-xl'
             }
           >
             <div className="mb-6">
@@ -66,7 +66,7 @@ export default function PageShell({ children }) {
 
         <div className="flex-1 flex flex-col">
           {/* Header */}
-          <header className="sticky top-0 z-30 bg-gradient-to-r from-white/60 to-brand-50/40 dark:from-slate-950/40 dark:to-slate-900/30 backdrop-blur-xl border-b border-brand-200/30 dark:border-brand-900/30">
+          <header className="sticky top-0 z-30 bg-gradient-to-r from-white/60 to-brand-50/30 dark:from-slate-950/30 dark:to-slate-900/20 backdrop-blur-xl">
             <div className="flex items-center justify-between px-4 py-4 lg:px-8">
               <div className="flex items-center gap-4">
                 <Button 

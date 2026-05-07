@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { http } from '../api/http.js';
 import { useAuth } from '../auth/AuthContext.jsx';
+import Button from '../components/ui/Button.jsx';
 
 export default function MessagesPage() {
   const { role } = useAuth();
@@ -74,7 +75,7 @@ export default function MessagesPage() {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-semibold">Messages</h2>
         <p className="text-sm text-slate-600 dark:text-slate-300">Parent-teacher communication</p>
@@ -82,19 +83,19 @@ export default function MessagesPage() {
 
       {error && <div className="text-red-600 text-sm">{error}</div>}
 
-      <div className="rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+      <div className="rounded-2xl shadow-md bg-gradient-to-br from-white/60 to-slate-50/60 dark:from-slate-900/60 dark:to-slate-800/40 p-4 transition-all duration-300 hover:shadow-lg">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-end">
           <label className="block">
             <span className="text-sm text-slate-700 dark:text-slate-200">Student</span>
             <select
-              className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 dark:border-slate-800 dark:bg-slate-950"
+              className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 dark:border-slate-800 dark:bg-slate-950 transition-all duration-300 focus:border-brand-500"
               value={selectedStudentId}
               onChange={(e) => setSelectedStudentId(e.target.value)}
             >
               {students.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.firstName} {s.lastName} (#{s.id})
-                </option>
+<option key={s.id} value={s.id}>
+                    {s.firstName} {s.lastName} (#{s.id})
+                  </option>
               ))}
             </select>
           </label>
@@ -103,7 +104,7 @@ export default function MessagesPage() {
             <label className="block">
               <span className="text-sm text-slate-700 dark:text-slate-200">Parent ID</span>
               <input
-                className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 dark:border-slate-800 dark:bg-slate-950"
+                className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 dark:border-slate-800 dark:bg-slate-950 transition-all duration-300 focus:border-brand-500"
                 value={parentId}
                 onChange={(e) => setParentId(e.target.value)}
                 type="number"
@@ -116,38 +117,37 @@ export default function MessagesPage() {
             <label className="block">
               <span className="text-sm text-slate-700 dark:text-slate-200">New message</span>
               <textarea
-                className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 min-h-[40px] dark:border-slate-800 dark:bg-slate-950"
+                className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 min-h-[40px] dark:border-slate-800 dark:bg-slate-950 transition-all duration-300 focus:border-brand-500"
                 value={draft}
                 onChange={(e) => setDraft(e.target.value)}
                 placeholder="Write your message…"
               />
             </label>
-            <button
+            <Button
               type="button"
               onClick={send}
-              className="rounded-lg bg-indigo-600 px-4 py-2 text-white text-sm font-medium"
             >
               Send
-            </button>
+            </Button>
           </div>
         </div>
       </div>
 
-      <div className="rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
-        <div className="text-sm font-medium mb-3">Conversation</div>
+      <div className="rounded-2xl shadow-md bg-white/50 dark:bg-slate-900/50 p-4 transition-all duration-300 hover:shadow-lg">
+        <div className="text-sm font-semibold mb-3 text-slate-900 dark:text-white">Conversation</div>
         {items.length === 0 ? (
-          <div className="text-sm text-slate-600 dark:text-slate-300">No messages.</div>
+          <div className="text-sm text-slate-600 dark:text-slate-400">No messages.</div>
         ) : (
           <div className="space-y-3">
             {[...items].reverse().map((m) => (
               <div
                 key={m.id}
-                className="rounded-lg bg-slate-50 p-3 dark:bg-slate-900 border border-slate-200 dark:border-slate-800"
+                className="rounded-lg bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-700 p-3 transition-all duration-300 hover:shadow-md hover:-translate-y-0.5"
               >
                 <div className="text-xs text-slate-500 dark:text-slate-400">
                   Parent #{m.parentId} • {m.createdAt ? new Date(m.createdAt).toLocaleString() : '—'}
                 </div>
-                <div className="mt-1 text-sm">{m.message}</div>
+                <div className="mt-1 text-sm text-slate-700 dark:text-slate-200">{m.message}</div>
               </div>
             ))}
           </div>

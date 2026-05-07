@@ -23,7 +23,7 @@ export default function NotificationsPage() {
   }, []);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-semibold">Notifications</h2>
         <p className="text-sm text-slate-600 dark:text-slate-300">Computed alerts (7 days)</p>
@@ -34,14 +34,14 @@ export default function NotificationsPage() {
       {!summary ? (
         <div className="text-sm text-slate-600 dark:text-slate-300">Loading…</div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div className="rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
-            <div className="text-sm text-slate-600 dark:text-slate-300">Pending payments</div>
-            <div className="text-2xl font-semibold mt-1">{summary.pendingPayments}</div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="rounded-2xl shadow-md bg-gradient-to-br from-white/60 to-slate-50/60 dark:from-slate-900/60 dark:to-slate-800/40 p-4 transition-all duration-300 hover:scale-105 hover:shadow-xl cursor-pointer">
+            <div className="text-sm text-slate-600 dark:text-slate-400 font-medium">Pending payments</div>
+            <div className="text-3xl font-bold mt-2 text-brand-600 dark:text-brand-400">{summary.pendingPayments}</div>
           </div>
-          <div className="rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
-            <div className="text-sm text-slate-600 dark:text-slate-300">Recent messages</div>
-            <div className="text-2xl font-semibold mt-1">{summary.recentMessages}</div>
+          <div className="rounded-2xl shadow-md bg-gradient-to-br from-white/60 to-slate-50/60 dark:from-slate-900/60 dark:to-slate-800/40 p-4 transition-all duration-300 hover:scale-105 hover:shadow-xl cursor-pointer">
+            <div className="text-sm text-slate-600 dark:text-slate-400 font-medium">Recent messages</div>
+            <div className="text-3xl font-bold mt-2 text-brand-600 dark:text-brand-400">{summary.recentMessages}</div>
           </div>
         </div>
       )}

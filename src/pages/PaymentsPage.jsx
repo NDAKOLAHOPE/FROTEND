@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { http } from '../api/http.js';
 import { useAuth } from '../auth/AuthContext.jsx';
+import Button from '../components/ui/Button.jsx';
 
 export default function PaymentsPage() {
   const { role } = useAuth();
@@ -103,7 +104,7 @@ export default function PaymentsPage() {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-semibold">Payments</h2>
         <p className="text-sm text-slate-600 dark:text-slate-300">
@@ -114,14 +115,14 @@ export default function PaymentsPage() {
       {canManage && (
         <form
           onSubmit={submitCreate}
-          className="rounded-2xl border border-slate-200 bg-white/85 p-4 dark:border-slate-800 dark:bg-slate-900/80"
+          className="rounded-2xl shadow-md bg-gradient-to-br from-white/60 to-slate-50/60 dark:from-slate-900/60 dark:to-slate-800/40 p-4 transition-all duration-300 hover:shadow-lg"
         >
-          <div className="text-sm font-medium mb-3">{editingId ? 'Update payment' : 'Add payment'}</div>
+          <div className="text-sm font-semibold mb-3 text-slate-900 dark:text-white">{editingId ? 'Update payment' : 'Add payment'}</div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <label className="block sm:col-span-2">
               <span className="text-sm text-slate-700 dark:text-slate-200">Student</span>
               <select
-                className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 dark:border-slate-800 dark:bg-slate-950"
+                className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 dark:border-slate-800 dark:bg-slate-950 transition-all duration-300 focus:border-brand-500"
                 value={form.studentId}
                 onChange={(e) => setForm((f) => ({ ...f, studentId: e.target.value }))}
                 required
@@ -139,7 +140,7 @@ export default function PaymentsPage() {
             <label className="block">
               <span className="text-sm text-slate-700 dark:text-slate-200">Amount</span>
               <input
-                className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 dark:border-slate-800 dark:bg-slate-950"
+                className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 dark:border-slate-800 dark:bg-slate-950 transition-all duration-300 focus:border-brand-500"
                 value={form.amount}
                 onChange={(e) => setForm((f) => ({ ...f, amount: e.target.value }))}
                 type="number"
@@ -151,7 +152,7 @@ export default function PaymentsPage() {
               <span className="text-sm text-slate-700 dark:text-slate-200">Payment date</span>
               <input
                 type="datetime-local"
-                className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 dark:border-slate-800 dark:bg-slate-950"
+                className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 dark:border-slate-800 dark:bg-slate-950 transition-all duration-300 focus:border-brand-500"
                 value={form.paymentDate}
                 onChange={(e) => setForm((f) => ({ ...f, paymentDate: e.target.value }))}
               />
@@ -160,7 +161,7 @@ export default function PaymentsPage() {
               <label className="block">
                 <span className="text-sm text-slate-700 dark:text-slate-200">Status</span>
                 <select
-                  className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 dark:border-slate-800 dark:bg-slate-950"
+                  className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 dark:border-slate-800 dark:bg-slate-950 transition-all duration-300 focus:border-brand-500"
                   value={form.status}
                   onChange={(e) => setForm((f) => ({ ...f, status: e.target.value }))}
                 >
@@ -172,20 +173,20 @@ export default function PaymentsPage() {
           </div>
           {error && <div className="text-red-600 text-sm mt-3">{error}</div>}
           <div className="mt-4 flex gap-2">
-            <button className="rounded-lg bg-indigo-600 px-4 py-2 text-white text-sm font-medium">
+            <Button type="submit">
               {editingId ? 'Save changes' : 'Create payment'}
-            </button>
+            </Button>
             {editingId && (
-              <button
+              <Button
                 type="button"
-                className="rounded-lg bg-slate-200 px-4 py-2 text-sm font-medium dark:bg-slate-800"
+                variant="ghost"
                 onClick={() => {
                   setEditingId(null);
                   setForm((f) => ({ ...f, amount: '', paymentDate: '', status: 'PENDING' }));
                 }}
               >
                 Cancel
-              </button>
+              </Button>
             )}
           </div>
         </form>
@@ -196,61 +197,62 @@ export default function PaymentsPage() {
       {loading ? (
         <div className="text-sm text-slate-600 dark:text-slate-300">Loading...</div>
       ) : (
-        <div className="rounded-2xl border border-slate-200 bg-white/85 dark:border-slate-800 dark:bg-slate-900/80 overflow-x-auto">
+        <div className="rounded-2xl shadow-md bg-white/50 dark:bg-slate-900/50 overflow-hidden transition-all duration-300 hover:shadow-lg">
           <table className="w-full text-left text-sm">
-            <thead className="border-b border-slate-200 dark:border-slate-800">
+            <thead className="bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-700 border-b border-slate-200/50 dark:border-slate-700/50">
               <tr>
-                <th className="p-3">ID</th>
-                <th className="p-3">Student</th>
-                <th className="p-3">Amount</th>
-                <th className="p-3">Payment date</th>
-                <th className="p-3">Status</th>
-                {canManage && <th className="p-3">Actions</th>}
+                <th className="p-4 font-semibold text-slate-700 dark:text-slate-200">ID</th>
+                <th className="p-4 font-semibold text-slate-700 dark:text-slate-200">Student</th>
+                <th className="p-4 font-semibold text-slate-700 dark:text-slate-200">Amount</th>
+                <th className="p-4 font-semibold text-slate-700 dark:text-slate-200">Payment date</th>
+                <th className="p-4 font-semibold text-slate-700 dark:text-slate-200">Status</th>
+                {canManage && <th className="p-4 font-semibold text-slate-700 dark:text-slate-200">Actions</th>}
               </tr>
             </thead>
             <tbody>
               {items.map((p) => (
-                <tr key={p.id} className="border-b border-slate-100 dark:border-slate-800">
-                  <td className="p-3 font-medium">{p.id}</td>
-                  <td className="p-3">{p.studentId}</td>
-                  <td className="p-3 font-semibold">{Number(p.amount).toFixed(2)}</td>
-                  <td className="p-3">{p.paymentDate ? new Date(p.paymentDate).toLocaleString() : '-'}</td>
-                  <td className="p-3">
+                <tr key={p.id} className="transition-all duration-300 hover:bg-brand-50/50 dark:hover:bg-slate-800/50 hover:translate-x-1 border-b border-slate-200/30 dark:border-slate-700/30 last:border-0">
+                  <td className="p-4 font-medium">{p.id}</td>
+                  <td className="p-4">{p.studentId}</td>
+                  <td className="p-4 font-semibold">{Number(p.amount).toFixed(2)}</td>
+                  <td className="p-4">{p.paymentDate ? new Date(p.paymentDate).toLocaleString() : '-'}</td>
+                  <td className="p-4">
                     <span
                       className={
                         p.status === 'PAID'
-                          ? 'inline-flex px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300 text-xs'
-                          : 'inline-flex px-2 py-1 rounded-full bg-amber-50 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300 text-xs'
+                          ? 'inline-flex px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300 text-xs font-medium'
+                          : 'inline-flex px-3 py-1.5 rounded-full bg-amber-50 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300 text-xs font-medium'
                       }
                     >
                       {p.status}
                     </span>
                   </td>
                   {canManage && (
-                    <td className="p-3">
+                    <td className="p-4">
                       <div className="flex gap-2 flex-wrap">
-                        <button
+                        <Button
                           type="button"
-                          className="px-3 py-1 rounded-md bg-indigo-600 text-white text-xs"
+                          className="px-3 py-1.5 text-xs"
                           onClick={() => startEdit(p)}
                         >
                           Edit
-                        </button>
-                        <button
+                        </Button>
+                        <Button
                           type="button"
-                          className="px-3 py-1 rounded-md bg-rose-600 text-white text-xs"
+                          variant="danger"
+                          className="px-3 py-1.5 text-xs"
                           onClick={() => removeItem(p.id)}
                         >
                           Delete
-                        </button>
+                        </Button>
                         {isAdmin && p.status !== 'PAID' && (
-                          <button
+                          <Button
                             type="button"
-                            className="px-3 py-1 rounded-md bg-emerald-600 text-white text-xs"
+                            className="px-3 py-1.5 text-xs"
                             onClick={() => updateStatus(p.id, 'PAID')}
                           >
                             Mark paid
-                          </button>
+                          </Button>
                         )}
                       </div>
                     </td>
@@ -259,7 +261,7 @@ export default function PaymentsPage() {
               ))}
               {items.length === 0 && (
                 <tr>
-                  <td className="p-3 text-slate-600" colSpan={canManage ? 6 : 5}>
+                  <td className="p-4 text-slate-600 dark:text-slate-400 text-center" colSpan={canManage ? 6 : 5}>
                     No payments yet.
                   </td>
                 </tr>
