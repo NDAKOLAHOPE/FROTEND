@@ -2,8 +2,8 @@ export default function Card({ children, className = '' }) {
   return (
     <div
       className={[
-        'rounded-2xl border border-slate-200/70 bg-white shadow-sm',
-        'dark:border-slate-800/70 dark:bg-slate-900/60',
+        'rounded-xl border border-brand-200/50 bg-gradient-to-br from-white to-brand-50/30 shadow-sm',
+        'dark:border-brand-900/30 dark:bg-gradient-to-br dark:from-slate-900/50 dark:to-brand-950/20',
         className,
       ].join(' ')}
     >
