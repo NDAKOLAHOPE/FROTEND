@@ -67,7 +67,7 @@ export default function DashboardPage() {
             {
               label: 'Payments',
               data: [paid, pending],
-              backgroundColor: ['#4f46e5', '#f59e0b'],
+              backgroundColor: ['#8b5cf6', '#f59e0b'],
             },
           ],
         },
@@ -98,8 +98,8 @@ export default function DashboardPage() {
             {
               label: 'Average score',
               data: data.length ? data : [0],
-              borderColor: '#22c55e',
-              backgroundColor: 'rgba(34,197,94,0.15)',
+              borderColor: '#3b82f6',
+              backgroundColor: 'rgba(59,130,246,0.15)',
               tension: 0.35,
             },
           ],
@@ -113,49 +113,53 @@ export default function DashboardPage() {
     <div className="space-y-6">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-semibold">Dashboard</h2>
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Dashboard</h2>
           <p className="text-sm text-slate-600 dark:text-slate-300">
             Statistics & summaries
           </p>
         </div>
         {notifications && (
-          <div className="hidden md:block rounded-2xl shadow-md bg-gradient-to-br from-white/60 to-slate-50/60 dark:from-slate-900/60 dark:to-slate-800/40 p-4 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 backdrop-blur-sm">
-            <div className="text-sm font-semibold text-slate-900 dark:text-white">Next notifications (7d)</div>
-            <div className="mt-2 text-sm text-slate-600 dark:text-slate-400">
-              Pending payments: <span className="font-bold text-brand-600 dark:text-brand-400">{notifications.pendingPayments}</span>
-            </div>
-            <div className="text-sm text-slate-600 dark:text-slate-400">
-              Recent messages: <span className="font-bold text-brand-600 dark:text-brand-400">{notifications.recentMessages}</span>
+          <div className="hidden md:block rounded-2xl bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl border border-white/30 dark:border-slate-700/30 p-5 transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5">
+            <div className="text-sm font-semibold text-slate-900 dark:text-white mb-3">Next notifications (7d)</div>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-slate-600 dark:text-slate-300">Pending payments</span>
+                <span className="font-bold text-primary-600 dark:text-primary-400">{notifications.pendingPayments}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-slate-600 dark:text-slate-300">Recent messages</span>
+                <span className="font-bold text-primary-600 dark:text-primary-400">{notifications.recentMessages}</span>
+              </div>
             </div>
           </div>
         )}
       </div>
 
-      {error && <div className="text-red-600 text-sm">{error}</div>}
+      {error && <div className="text-rose-600 text-sm">{error}</div>}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
         {cards.map((c) => (
           <div
             key={c.title}
-            className="rounded-2xl shadow-md bg-gradient-to-br from-white/60 to-slate-50/60 dark:from-slate-900/60 dark:to-slate-800/40 p-4 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:-translate-y-1 cursor-pointer"
+            className="rounded-2xl bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl border border-white/30 dark:border-slate-700/30 p-5 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer"
           >
-            <div className="text-sm text-slate-600 dark:text-slate-400 font-medium">{c.title}</div>
-            <div className="text-3xl font-bold mt-2 text-brand-600 dark:text-brand-400">{c.value ?? 0}</div>
+            <div className="text-sm text-slate-600 dark:text-slate-300 font-medium">{c.title}</div>
+            <div className="text-3xl font-bold mt-2 text-primary-600 dark:text-primary-400">{c.value ?? 0}</div>
           </div>
         ))}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="rounded-2xl shadow-md bg-white/50 dark:bg-slate-900/50 p-4 h-64 transition-all duration-300 hover:shadow-lg">
-          <div className="text-sm font-semibold text-slate-900 dark:text-white">Payment status</div>
-          <div className="h-56 mt-2">
+        <div className="rounded-2xl bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl border border-white/30 dark:border-slate-700/30 p-5 h-64 transition-all duration-300 hover:shadow-xl">
+          <div className="text-sm font-semibold text-slate-900 dark:text-white mb-3">Payment status</div>
+          <div className="h-52">
             <canvas ref={barCanvasRef} />
           </div>
         </div>
 
-        <div className="rounded-2xl shadow-md bg-white/50 dark:bg-slate-900/50 p-4 h-64 transition-all duration-300 hover:shadow-lg">
-          <div className="text-sm font-semibold text-slate-900 dark:text-white">Grades analytics (preview)</div>
-          <div className="h-56 mt-2">
+        <div className="rounded-2xl bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl border border-white/30 dark:border-slate-700/30 p-5 h-64 transition-all duration-300 hover:shadow-xl">
+          <div className="text-sm font-semibold text-slate-900 dark:text-white mb-3">Grades analytics</div>
+          <div className="h-52">
             <canvas ref={lineCanvasRef} />
           </div>
         </div>
@@ -163,4 +167,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-

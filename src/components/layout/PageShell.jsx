@@ -17,64 +17,70 @@ export default function PageShell({ children }) {
 
   return (
     <div className="min-h-screen app-bg text-slate-900 dark:text-slate-100">
-      <div className="lg:flex">
-        {/* Desktop Sidebar */}
-        <aside className="hidden lg:block lg:w-64 lg:sticky lg:top-0 lg:h-screen bg-gradient-to-b from-brand-50/60 via-white/40 to-transparent dark:from-slate-900/40 dark:via-slate-950/40 dark:to-transparent backdrop-blur-xl">
+      <div className="flex">
+        <aside className="hidden lg:flex lg:w-64 lg:sticky lg:top-0 lg:h-screen flex-col bg-white/40 dark:bg-slate-900/40 backdrop-blur-2xl border-r border-white/30 dark:border-slate-700/30">
           <div className="h-full p-6 flex flex-col">
-            <div className="mb-8">
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-2xl">🎓</span>
-                <div>
-                  <div className="text-base font-bold bg-gradient-to-r from-brand-600 to-brand-700 bg-clip-text text-transparent">School Pro</div>
-                  <div className="text-xs text-slate-500 dark:text-slate-400 font-medium">{role}</div>
+            <div className="mb-8 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center text-white text-xl shadow-lg shadow-primary-500/30">
+                🎓
+              </div>
+              <div>
+                <div className="text-base font-bold bg-gradient-to-r from-primary-600 to-accent-600 bg-clip-text text-transparent">
+                  School Pro
                 </div>
+                <div className="text-xs text-slate-500 dark:text-slate-400 font-medium">{role}</div>
               </div>
             </div>
             <div className="flex-1">
               <Sidebar role={role} onNavigate={() => {}} />
             </div>
-            <div className="pt-4 mt-2 hover:bg-brand-50/50 dark:hover:bg-slate-800/50 px-3 py-2.5 rounded-xl transition-all duration-300 cursor-pointer">
-              <div className="text-xs text-slate-500 dark:text-slate-400 truncate">{user?.email}</div>
+            <div className="mt-auto pt-4 border-t border-white/30 dark:border-slate-700/30">
+              <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-white/40 dark:bg-slate-800/40 hover:bg-white/60 dark:hover:bg-slate-800/60 transition-all duration-300">
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-400 to-accent-400 flex items-center justify-center text-white text-xs font-bold">
+                  {user?.email?.[0]?.toUpperCase() ?? 'U'}
+                </div>
+                <div className="text-xs text-slate-600 dark:text-slate-300 truncate flex-1">{user?.email}</div>
+              </div>
             </div>
           </div>
         </aside>
 
-        {/* Mobile sidebar */}
         <div className="lg:hidden">
           <div
-            className={mobileOpen ? 'fixed inset-0 z-40 bg-black/40 backdrop-blur-sm' : 'hidden'}
+            className={mobileOpen ? 'fixed inset-0 z-40 bg-black/50 backdrop-blur-sm' : 'hidden'}
             onClick={() => setMobileOpen(false)}
           />
-          <div
+          <aside
             className={mobileOpen
-              ? 'fixed left-0 top-0 z-50 h-full w-72 bg-gradient-to-b from-brand-50/95 to-white/95 dark:from-slate-900/95 dark:to-slate-950/95 p-6 backdrop-blur-xl transition-transform duration-300'
-              : 'fixed left-0 top-0 z-50 h-full w-72 bg-gradient-to-b from-brand-50/95 to-white/95 dark:from-slate-900/95 dark:to-slate-950/95 p-6 -translate-x-full transition-transform backdrop-blur-xl'
+              ? 'fixed left-0 top-0 z-50 h-full w-72 bg-white/90 dark:bg-slate-900/90 p-6 backdrop-blur-2xl border-r border-white/30 dark:border-slate-700/30 transition-transform duration-300 translate-x-0'
+              : 'fixed left-0 top-0 z-50 h-full w-72 bg-white/90 dark:bg-slate-900/90 p-6 backdrop-blur-2xl border-r border-white/30 dark:border-slate-700/30 -translate-x-full transition-transform duration-300'
             }
           >
             <div className="mb-6">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="text-2xl">🎓</span>
-                <div>
-                  <div className="text-sm font-bold bg-gradient-to-r from-brand-600 to-brand-700 bg-clip-text text-transparent">School Pro</div>
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center text-white text-xl">
+                  🎓
+                </div>
+                <div className="text-sm font-bold bg-gradient-to-r from-primary-600 to-accent-600 bg-clip-text text-transparent">
+                  School Pro
                 </div>
               </div>
               <div className="text-xs text-slate-500 dark:text-slate-400">{user?.email}</div>
             </div>
             <Sidebar role={role} onNavigate={() => setMobileOpen(false)} />
-          </div>
+          </aside>
         </div>
 
         <div className="flex-1 flex flex-col">
-          {/* Header */}
-          <header className="sticky top-0 z-30 bg-gradient-to-r from-white/60 to-brand-50/30 dark:from-slate-950/30 dark:to-slate-900/20 backdrop-blur-xl">
+          <header className="sticky top-0 z-30 bg-white/60 dark:bg-slate-900/60 backdrop-blur-2xl border-b border-white/30 dark:border-slate-700/30">
             <div className="flex items-center justify-between px-4 py-4 lg:px-8">
               <div className="flex items-center gap-4">
-                <Button 
-                  variant="soft" 
-                  className="lg:hidden px-3 py-2" 
+                <Button
+                  variant="soft"
+                  className="lg:hidden px-3 py-2"
                   onClick={() => setMobileOpen(true)}
                 >
-                  ☰ Menu
+                  ☰
                 </Button>
                 <div>
                   <div className="text-base font-bold text-slate-900 dark:text-white">School Management</div>
@@ -83,8 +89,8 @@ export default function PageShell({ children }) {
               </div>
 
               <div className="flex items-center gap-3">
-                <Button 
-                  variant="soft" 
+                <Button
+                  variant="soft"
                   onClick={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))}
                   className="px-3 py-2 text-xs"
                 >
@@ -95,8 +101,7 @@ export default function PageShell({ children }) {
             </div>
           </header>
 
-          {/* Main Content */}
-          <main className="flex-1 px-4 py-8 lg:px-8 overflow-auto">
+          <main className="flex-1 px-4 py-8 lg:px-8">
             <div className="mx-auto max-w-7xl w-full">{children}</div>
           </main>
         </div>
@@ -104,4 +109,3 @@ export default function PageShell({ children }) {
     </div>
   );
 }
-

@@ -106,7 +106,7 @@ export default function PaymentsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-semibold">Payments</h2>
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Payments</h2>
         <p className="text-sm text-slate-600 dark:text-slate-300">
           Gestion des paiements, edition/suppression et statut reserve a l'admin
         </p>
@@ -115,14 +115,14 @@ export default function PaymentsPage() {
       {canManage && (
         <form
           onSubmit={submitCreate}
-          className="rounded-2xl shadow-md bg-gradient-to-br from-white/60 to-slate-50/60 dark:from-slate-900/60 dark:to-slate-800/40 p-4 transition-all duration-300 hover:shadow-lg"
+          className="rounded-2xl bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl border border-white/30 dark:border-slate-700/30 p-5 transition-all duration-300 hover:shadow-xl"
         >
           <div className="text-sm font-semibold mb-3 text-slate-900 dark:text-white">{editingId ? 'Update payment' : 'Add payment'}</div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <label className="block sm:col-span-2">
               <span className="text-sm text-slate-700 dark:text-slate-200">Student</span>
               <select
-                className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 dark:border-slate-800 dark:bg-slate-950 transition-all duration-300 focus:border-brand-500"
+                className="mt-1 w-full rounded-xl border border-slate-200 px-4 py-2.5 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-100 transition-all duration-300 focus:border-primary-500"
                 value={form.studentId}
                 onChange={(e) => setForm((f) => ({ ...f, studentId: e.target.value }))}
                 required
@@ -140,7 +140,7 @@ export default function PaymentsPage() {
             <label className="block">
               <span className="text-sm text-slate-700 dark:text-slate-200">Amount</span>
               <input
-                className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 dark:border-slate-800 dark:bg-slate-950 transition-all duration-300 focus:border-brand-500"
+                className="mt-1 w-full rounded-xl border border-slate-200 px-4 py-2.5 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-100 transition-all duration-300 focus:border-primary-500"
                 value={form.amount}
                 onChange={(e) => setForm((f) => ({ ...f, amount: e.target.value }))}
                 type="number"
@@ -152,7 +152,7 @@ export default function PaymentsPage() {
               <span className="text-sm text-slate-700 dark:text-slate-200">Payment date</span>
               <input
                 type="datetime-local"
-                className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 dark:border-slate-800 dark:bg-slate-950 transition-all duration-300 focus:border-brand-500"
+                className="mt-1 w-full rounded-xl border border-slate-200 px-4 py-2.5 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-100 transition-all duration-300 focus:border-primary-500"
                 value={form.paymentDate}
                 onChange={(e) => setForm((f) => ({ ...f, paymentDate: e.target.value }))}
               />
@@ -161,7 +161,7 @@ export default function PaymentsPage() {
               <label className="block">
                 <span className="text-sm text-slate-700 dark:text-slate-200">Status</span>
                 <select
-                  className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 dark:border-slate-800 dark:bg-slate-950 transition-all duration-300 focus:border-brand-500"
+                  className="mt-1 w-full rounded-xl border border-slate-200 px-4 py-2.5 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-100 transition-all duration-300 focus:border-primary-500"
                   value={form.status}
                   onChange={(e) => setForm((f) => ({ ...f, status: e.target.value }))}
                 >
@@ -171,7 +171,7 @@ export default function PaymentsPage() {
               </label>
             )}
           </div>
-          {error && <div className="text-red-600 text-sm mt-3">{error}</div>}
+          {error && <div className="text-rose-600 text-sm mt-3">{error}</div>}
           <div className="mt-4 flex gap-2">
             <Button type="submit">
               {editingId ? 'Save changes' : 'Create payment'}
@@ -192,14 +192,14 @@ export default function PaymentsPage() {
         </form>
       )}
 
-      {error && !canManage && <div className="text-red-600 text-sm">{error}</div>}
+      {error && !canManage && <div className="text-rose-600 text-sm">{error}</div>}
 
       {loading ? (
         <div className="text-sm text-slate-600 dark:text-slate-300">Loading...</div>
       ) : (
-        <div className="rounded-2xl shadow-md bg-white/50 dark:bg-slate-900/50 overflow-hidden transition-all duration-300 hover:shadow-lg">
+        <div className="rounded-2xl bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl border border-white/30 dark:border-slate-700/30 overflow-hidden transition-all duration-300 hover:shadow-xl">
           <table className="w-full text-left text-sm">
-            <thead className="bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-700 border-b border-slate-200/50 dark:border-slate-700/50">
+            <thead className="bg-gradient-to-r from-primary-50/50 to-accent-50/50 dark:from-slate-800/50 dark:to-slate-700/50 border-b border-white/30 dark:border-slate-700/30">
               <tr>
                 <th className="p-4 font-semibold text-slate-700 dark:text-slate-200">ID</th>
                 <th className="p-4 font-semibold text-slate-700 dark:text-slate-200">Student</th>
@@ -211,17 +211,17 @@ export default function PaymentsPage() {
             </thead>
             <tbody>
               {items.map((p) => (
-                <tr key={p.id} className="transition-all duration-300 hover:bg-brand-50/50 dark:hover:bg-slate-800/50 hover:translate-x-1 border-b border-slate-200/30 dark:border-slate-700/30 last:border-0">
-                  <td className="p-4 font-medium">{p.id}</td>
-                  <td className="p-4">{p.studentId}</td>
-                  <td className="p-4 font-semibold">{Number(p.amount).toFixed(2)}</td>
-                  <td className="p-4">{p.paymentDate ? new Date(p.paymentDate).toLocaleString() : '-'}</td>
+                <tr key={p.id} className="transition-all duration-300 hover:bg-primary-50/50 dark:hover:bg-slate-800/50 border-b border-white/20 dark:border-slate-700/20 last:border-0">
+                  <td className="p-4 font-medium text-slate-900 dark:text-slate-100">{p.id}</td>
+                  <td className="p-4 text-slate-700 dark:text-slate-200">{p.studentId}</td>
+                  <td className="p-4 font-semibold text-primary-600 dark:text-primary-400">{Number(p.amount).toFixed(2)}</td>
+                  <td className="p-4 text-slate-600 dark:text-slate-300">{p.paymentDate ? new Date(p.paymentDate).toLocaleString() : '-'}</td>
                   <td className="p-4">
                     <span
                       className={
                         p.status === 'PAID'
-                          ? 'inline-flex px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300 text-xs font-medium'
-                          : 'inline-flex px-3 py-1.5 rounded-full bg-amber-50 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300 text-xs font-medium'
+                          ? 'inline-flex px-3 py-1.5 rounded-full bg-emerald-100/80 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300 text-xs font-medium'
+                          : 'inline-flex px-3 py-1.5 rounded-full bg-amber-100/80 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300 text-xs font-medium'
                       }
                     >
                       {p.status}

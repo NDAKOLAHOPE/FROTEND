@@ -104,14 +104,14 @@ export default function GradesPage() {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-semibold">Grades</h2>
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Grades</h2>
         <p className="text-sm text-slate-600 dark:text-slate-300">CRUD des notes avec calcul des moyennes</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="rounded-2xl shadow-md bg-gradient-to-br from-white/60 to-slate-50/60 dark:from-slate-900/60 dark:to-slate-800/40 p-4 transition-all duration-300 hover:shadow-lg">
+        <div className="rounded-2xl bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl border border-white/30 dark:border-slate-700/30 p-5 transition-all duration-300 hover:shadow-xl">
           <div className="text-sm font-semibold mb-3 text-slate-900 dark:text-white">Averages by term</div>
           {avgByTerm.length === 0 ? (
             <div className="text-sm text-slate-600 dark:text-slate-300">No data.</div>
@@ -120,7 +120,7 @@ export default function GradesPage() {
               {avgByTerm.map((r) => (
                 <div key={r.term} className="flex items-center justify-between text-sm">
                   <span className="text-slate-600 dark:text-slate-300">{r.term}</span>
-                  <span className="font-semibold">{r.avg.toFixed(2)}</span>
+                  <span className="font-semibold text-primary-600 dark:text-primary-400">{r.avg.toFixed(2)}</span>
                 </div>
               ))}
             </div>
@@ -130,14 +130,14 @@ export default function GradesPage() {
         {canManage && (
           <form
             onSubmit={submitCreate}
-            className="rounded-2xl shadow-md bg-gradient-to-br from-white/60 to-slate-50/60 dark:from-slate-900/60 dark:to-slate-800/40 p-4 transition-all duration-300 hover:shadow-lg"
+            className="rounded-2xl bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl border border-white/30 dark:border-slate-700/30 p-5 transition-all duration-300 hover:shadow-xl"
           >
             <div className="text-sm font-semibold mb-3 text-slate-900 dark:text-white">{editingId ? 'Update grade' : 'Add grade'}</div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <label className="block sm:col-span-2">
                 <span className="text-sm text-slate-700 dark:text-slate-200">Student</span>
                 <select
-                  className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 dark:border-slate-800 dark:bg-slate-950 transition-all duration-300 focus:border-brand-500"
+                  className="mt-1 w-full rounded-xl border border-slate-200 px-4 py-2.5 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-100 transition-all duration-300 focus:border-primary-500"
                   value={form.studentId}
                   onChange={(e) => setForm((f) => ({ ...f, studentId: e.target.value }))}
                   required
@@ -155,7 +155,7 @@ export default function GradesPage() {
               <label className="block">
                 <span className="text-sm text-slate-700 dark:text-slate-200">Subject</span>
                 <input
-                  className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 dark:border-slate-800 dark:bg-slate-950 transition-all duration-300 focus:border-brand-500"
+                  className="mt-1 w-full rounded-xl border border-slate-200 px-4 py-2.5 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-100 transition-all duration-300 focus:border-primary-500"
                   value={form.subject}
                   onChange={(e) => setForm((f) => ({ ...f, subject: e.target.value }))}
                   required
@@ -164,7 +164,7 @@ export default function GradesPage() {
               <label className="block">
                 <span className="text-sm text-slate-700 dark:text-slate-200">Score</span>
                 <input
-                  className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 dark:border-slate-800 dark:bg-slate-950 transition-all duration-300 focus:border-brand-500"
+                  className="mt-1 w-full rounded-xl border border-slate-200 px-4 py-2.5 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-100 transition-all duration-300 focus:border-primary-500"
                   value={form.score}
                   onChange={(e) => setForm((f) => ({ ...f, score: e.target.value }))}
                   type="number"
@@ -175,13 +175,13 @@ export default function GradesPage() {
               <label className="block">
                 <span className="text-sm text-slate-700 dark:text-slate-200">Term</span>
                 <input
-                  className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 dark:border-slate-800 dark:bg-slate-950 transition-all duration-300 focus:border-brand-500"
+                  className="mt-1 w-full rounded-xl border border-slate-200 px-4 py-2.5 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-100 transition-all duration-300 focus:border-primary-500"
                   value={form.term}
                   onChange={(e) => setForm((f) => ({ ...f, term: e.target.value }))}
                 />
               </label>
             </div>
-            {error && <div className="text-red-600 text-sm mt-3">{error}</div>}
+            {error && <div className="text-rose-600 text-sm mt-3">{error}</div>}
             <div className="mt-4 flex gap-2">
               <Button type="submit">
                 {editingId ? 'Save changes' : 'Add grade'}
@@ -203,14 +203,14 @@ export default function GradesPage() {
         )}
       </div>
 
-      {error && !canManage && <div className="text-red-600 text-sm">{error}</div>}
+      {error && !canManage && <div className="text-rose-600 text-sm">{error}</div>}
 
       {loading ? (
         <div className="text-sm text-slate-600 dark:text-slate-300">Loading...</div>
       ) : (
-        <div className="rounded-2xl shadow-md bg-white/50 dark:bg-slate-900/50 overflow-hidden transition-all duration-300 hover:shadow-lg">
+        <div className="rounded-2xl bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl border border-white/30 dark:border-slate-700/30 overflow-hidden transition-all duration-300 hover:shadow-xl">
           <table className="w-full text-left text-sm">
-            <thead className="bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-700 border-b border-slate-200/50 dark:border-slate-700/50">
+            <thead className="bg-gradient-to-r from-primary-50/50 to-accent-50/50 dark:from-slate-800/50 dark:to-slate-700/50 border-b border-white/30 dark:border-slate-700/30">
               <tr>
                 <th className="p-4 font-semibold text-slate-700 dark:text-slate-200">ID</th>
                 <th className="p-4 font-semibold text-slate-700 dark:text-slate-200">Student</th>
@@ -222,12 +222,12 @@ export default function GradesPage() {
             </thead>
             <tbody>
               {items.map((g) => (
-                <tr key={g.id} className="transition-all duration-300 hover:bg-brand-50/50 dark:hover:bg-slate-800/50 hover:translate-x-1 border-b border-slate-200/30 dark:border-slate-700/30 last:border-0">
-                  <td className="p-4 font-medium">{g.id}</td>
-                  <td className="p-4">{g.studentId}</td>
-                  <td className="p-4">{g.subject}</td>
-                  <td className="p-4 font-semibold">{Number(g.score).toFixed(2)}</td>
-                  <td className="p-4">{g.term ?? '-'}</td>
+                <tr key={g.id} className="transition-all duration-300 hover:bg-primary-50/50 dark:hover:bg-slate-800/50 border-b border-white/20 dark:border-slate-700/20 last:border-0">
+                  <td className="p-4 font-medium text-slate-900 dark:text-slate-100">{g.id}</td>
+                  <td className="p-4 text-slate-700 dark:text-slate-200">{g.studentId}</td>
+                  <td className="p-4 text-slate-600 dark:text-slate-300">{g.subject}</td>
+                  <td className="p-4 font-semibold text-primary-600 dark:text-primary-400">{Number(g.score).toFixed(2)}</td>
+                  <td className="p-4 text-slate-600 dark:text-slate-300">{g.term ?? '-'}</td>
                   {canManage && (
                     <td className="p-4">
                       <div className="flex gap-2">

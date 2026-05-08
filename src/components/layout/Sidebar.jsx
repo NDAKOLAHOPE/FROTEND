@@ -1,19 +1,19 @@
 import { NavLink } from 'react-router-dom';
 
 const linkBase = [
-  { to: '/dashboard', label: '📊 Dashboard', roles: ['ADMIN', 'TEACHER', 'PARENT', 'STUDENT'] },
-  { to: '/students', label: '👥 Students', roles: ['ADMIN', 'TEACHER', 'PARENT'] },
-  { to: '/grades', label: '📈 Grades', roles: ['ADMIN', 'TEACHER', 'PARENT'] },
-  { to: '/payments', label: '💳 Payments', roles: ['ADMIN', 'TEACHER', 'PARENT'] },
-  { to: '/messages', label: '💬 Messages', roles: ['ADMIN', 'TEACHER', 'PARENT'] },
-  { to: '/notifications', label: '🔔 Notifications', roles: ['ADMIN', 'TEACHER', 'PARENT'] },
+  { to: '/dashboard', label: 'Dashboard', icon: '📊' },
+  { to: '/students', label: 'Students', icon: '👥', roles: ['ADMIN', 'TEACHER', 'PARENT'] },
+  { to: '/grades', label: 'Grades', icon: '📈', roles: ['ADMIN', 'TEACHER', 'PARENT'] },
+  { to: '/payments', label: 'Payments', icon: '💳', roles: ['ADMIN', 'TEACHER', 'PARENT'] },
+  { to: '/messages', label: 'Messages', icon: '💬', roles: ['ADMIN', 'TEACHER', 'PARENT'] },
+  { to: '/notifications', label: 'Notifications', icon: '🔔', roles: ['ADMIN', 'TEACHER', 'PARENT'] },
 ];
 
 export default function Sidebar({ role, onNavigate }) {
   return (
-    <nav className="flex flex-col gap-1">
+    <nav className="flex flex-col gap-1.5">
       {linkBase
-        .filter((l) => l.roles.includes(role))
+        .filter((l) => !l.roles || l.roles.includes(role))
         .map((l) => (
           <NavLink
             key={l.to}
@@ -21,18 +21,20 @@ export default function Sidebar({ role, onNavigate }) {
             onClick={onNavigate}
             className={({ isActive }) =>
               [
-                'px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-300 ease-in-out',
-                'hover:translate-x-1 hover:shadow-md',
+                'group relative flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium',
+                'transition-all duration-300 ease-out',
+                'hover:bg-white/60 dark:hover:bg-slate-800/60',
                 isActive
-                  ? 'bg-gradient-to-r from-brand-500 to-brand-600 text-white shadow-lg shadow-brand-500/30'
-                  : 'text-slate-700 hover:bg-brand-50/80 hover:text-brand-900 dark:text-slate-300 dark:hover:bg-slate-700/80 dark:hover:text-slate-100',
+                  ? 'text-white bg-gradient-to-r from-primary-500 to-accent-500 shadow-lg shadow-primary-500/30 sidebar-active-glow'
+                  : 'text-slate-700 hover:text-primary-700 dark:text-slate-300 dark:hover:text-primary-300',
               ].join(' ')
             }
           >
-            {l.label}
+            <span className="text-lg">{l.icon}</span>
+            <span>{l.label}</span>
+            <span className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-primary-400 to-accent-400 rounded-r-full scale-y-0 group-hover:scale-y-100 transition-transform origin-bottom duration-300" />
           </NavLink>
         ))}
     </nav>
   );
 }
-

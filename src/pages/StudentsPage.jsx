@@ -166,9 +166,9 @@ export default function StudentsPage() {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-semibold">Students</h2>
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Students</h2>
         <p className="text-sm text-slate-600 dark:text-slate-300">
           Gestion complete des etudiants et notes de progression
         </p>
@@ -177,13 +177,14 @@ export default function StudentsPage() {
       {canManage && (
         <form
           onSubmit={submitCreate}
-          className="rounded-2xl shadow-md bg-gradient-to-br from-white/60 to-slate-50/60 dark:from-slate-900/60 dark:to-slate-800/40 p-4 border border-brand-100/20 dark:border-brand-900/20"
+          className="rounded-2xl bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl border border-white/30 dark:border-slate-700/30 p-5 transition-all duration-300 hover:shadow-xl"
         >
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="text-sm font-semibold mb-4 text-slate-900 dark:text-white">{editingStudentId ? 'Update student' : 'Create student'}</div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <label className="block">
               <span className="text-sm text-slate-700 dark:text-slate-200">First name</span>
               <input
-                className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 dark:border-slate-800 dark:bg-slate-950"
+                className="mt-1 w-full rounded-xl border border-slate-200 px-4 py-2.5 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-100 transition-all duration-300 focus:border-primary-500"
                 value={form.firstName}
                 onChange={(e) => setForm((f) => ({ ...f, firstName: e.target.value }))}
                 required
@@ -192,7 +193,7 @@ export default function StudentsPage() {
             <label className="block">
               <span className="text-sm text-slate-700 dark:text-slate-200">Last name</span>
               <input
-                className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 dark:border-slate-800 dark:bg-slate-950"
+                className="mt-1 w-full rounded-xl border border-slate-200 px-4 py-2.5 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-100 transition-all duration-300 focus:border-primary-500"
                 value={form.lastName}
                 onChange={(e) => setForm((f) => ({ ...f, lastName: e.target.value }))}
                 required
@@ -202,7 +203,7 @@ export default function StudentsPage() {
               <span className="text-sm text-slate-700 dark:text-slate-200">DOB</span>
               <input
                 type="date"
-                className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 dark:border-slate-800 dark:bg-slate-950"
+                className="mt-1 w-full rounded-xl border border-slate-200 px-4 py-2.5 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-100 transition-all duration-300 focus:border-primary-500"
                 value={form.dob}
                 onChange={(e) => setForm((f) => ({ ...f, dob: e.target.value }))}
               />
@@ -210,14 +211,14 @@ export default function StudentsPage() {
             <label className="block">
               <span className="text-sm text-slate-700 dark:text-slate-200">Class</span>
               <input
-                className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 dark:border-slate-800 dark:bg-slate-950"
+                className="mt-1 w-full rounded-xl border border-slate-200 px-4 py-2.5 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-100 transition-all duration-300 focus:border-primary-500"
                 value={form.className}
                 onChange={(e) => setForm((f) => ({ ...f, className: e.target.value }))}
                 placeholder="e.g. 6A"
               />
             </label>
           </div>
-          <div className="mt-4 flex gap-2">
+          <div className="mt-5 flex gap-2">
             <Button type="submit">
               {editingStudentId ? 'Update student' : 'Create student'}
             </Button>
@@ -237,14 +238,14 @@ export default function StudentsPage() {
         </form>
       )}
 
-      {error && <div className="text-red-600 text-sm">{error}</div>}
+      {error && <div className="text-rose-600 text-sm">{error}</div>}
 
       {loading ? (
         <div className="text-sm text-slate-600 dark:text-slate-300">Loading...</div>
       ) : (
-        <div className="rounded-2xl shadow-md bg-white/50 dark:bg-slate-900/50 overflow-hidden transition-all duration-300 hover:shadow-lg">
+        <div className="rounded-2xl bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl border border-white/30 dark:border-slate-700/30 overflow-hidden transition-all duration-300 hover:shadow-xl">
           <table className="w-full text-left text-sm">
-            <thead className="bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-700 border-b border-slate-200/50 dark:border-slate-700/50">
+            <thead className="bg-gradient-to-r from-primary-50/50 to-accent-50/50 dark:from-slate-800/50 dark:to-slate-700/50 border-b border-white/30 dark:border-slate-700/30">
               <tr>
                 <th className="p-4 font-semibold text-slate-700 dark:text-slate-200">ID</th>
                 <th className="p-4 font-semibold text-slate-700 dark:text-slate-200">Name</th>
@@ -255,13 +256,13 @@ export default function StudentsPage() {
             </thead>
             <tbody>
               {students.map((s) => (
-                <tr key={s.id} className="transition-all duration-300 hover:bg-brand-50/50 dark:hover:bg-slate-800/50 hover:translate-x-1 border-b border-slate-200/30 dark:border-slate-700/30 last:border-0">
-                  <td className="p-4 font-medium">{s.id}</td>
-                  <td className="p-4">
+                <tr key={s.id} className="transition-all duration-300 hover:bg-primary-50/50 dark:hover:bg-slate-800/50 border-b border-white/20 dark:border-slate-700/20 last:border-0">
+                  <td className="p-4 font-medium text-slate-900 dark:text-slate-100">{s.id}</td>
+                  <td className="p-4 text-slate-700 dark:text-slate-200">
                     {s.firstName} {s.lastName}
                   </td>
-                  <td className="p-4">{s.dob ? new Date(s.dob).toLocaleDateString() : '-'}</td>
-                  <td className="p-4">{s.className ?? '-'}</td>
+                  <td className="p-4 text-slate-600 dark:text-slate-300">{s.dob ? new Date(s.dob).toLocaleDateString() : '-'}</td>
+                  <td className="p-4 text-slate-600 dark:text-slate-300">{s.className ?? '-'}</td>
                   {canManage && (
                     <td className="p-4">
                       <div className="flex gap-2">
@@ -297,19 +298,19 @@ export default function StudentsPage() {
         </div>
       )}
 
-      <div className="rounded-2xl shadow-md bg-white/50 dark:bg-slate-900/50 p-4 space-y-3">
+      <div className="rounded-2xl bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl border border-white/30 dark:border-slate-700/30 p-5 space-y-3 transition-all duration-300 hover:shadow-xl">
         <div>
           <div className="text-lg font-semibold text-slate-900 dark:text-white">Progress notes</div>
           <div className="text-sm text-slate-600 dark:text-slate-400">Suivi de l'evolution</div>
         </div>
 
-        {progressError && <div className="text-red-600 text-sm">{progressError}</div>}
+        {progressError && <div className="text-rose-600 text-sm">{progressError}</div>}
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-end">
           <label className="block">
             <span className="text-sm text-slate-700 dark:text-slate-200">Student</span>
             <select
-              className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 dark:border-slate-800 dark:bg-slate-950"
+              className="mt-1 w-full rounded-xl border border-slate-200 px-4 py-2.5 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-100 transition-all duration-300 focus:border-primary-500"
               value={progressStudentId}
               onChange={(e) => setProgressStudentId(e.target.value)}
               disabled={students.length === 0}
@@ -325,7 +326,7 @@ export default function StudentsPage() {
           <label className="block md:col-span-2">
             <span className="text-sm text-slate-700 dark:text-slate-200">Note</span>
             <textarea
-              className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 min-h-[80px] dark:border-slate-800 dark:bg-slate-950"
+              className="mt-1 w-full rounded-xl border border-slate-200 px-4 py-2.5 min-h-[80px] dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-100 transition-all duration-300 focus:border-primary-500"
               value={progressNote}
               onChange={(e) => setProgressNote(e.target.value)}
               placeholder="Ex: progression en lecture"
@@ -363,7 +364,7 @@ export default function StudentsPage() {
           ) : (
             <div className="space-y-2">
               {progressItems.slice(0, 10).map((p) => (
-                <div key={p.id} className="rounded-lg bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-700 p-3 transition-all duration-300 hover:shadow-md hover:-translate-y-0.5">
+                <div key={p.id} className="rounded-xl bg-gradient-to-r from-primary-50/50 to-accent-50/50 dark:from-slate-800/50 dark:to-slate-700/50 p-3 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5">
                   <div className="text-xs text-slate-500 dark:text-slate-400">
                     Student #{p.studentId} - {p.createdAt ? new Date(p.createdAt).toLocaleString() : '-'}
                   </div>
