@@ -23,8 +23,10 @@ export default function MessagesPage() {
   };
 
   const loadMessages = async () => {
-    if (!selectedStudentId) return;
-    const res = await http.get(`/messages?studentId=${encodeURIComponent(selectedStudentId)}`);
+    const url = selectedStudentId
+      ? `/messages?studentId=${encodeURIComponent(selectedStudentId)}`
+      : '/messages';
+    const res = await http.get(url);
     setItems(res.data);
   };
 
@@ -33,6 +35,7 @@ export default function MessagesPage() {
     (async () => {
       try {
         if (alive) await loadStudents();
+        if (alive) await loadMessages();
       } catch (e) {
         if (alive) setError(e?.response?.data?.message ?? e?.message ?? 'Erreur');
       }
@@ -133,23 +136,23 @@ export default function MessagesPage() {
 
       <div className="rounded-2xl bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl border border-white/30 dark:border-slate-700/30 p-5 transition-all duration-300 hover:shadow-xl">
         <div className="text-sm font-semibold mb-3 text-slate-900 dark:text-white">Conversation</div>
-        {items.length === 0 ? (
-          <div className="text-sm text-slate-600 dark:text-slate-400">No messages.</div>
-        ) : (
-          <div className="space-y-3">
-            {[...items].reverse().map((m) => (
-              <div
-                key={m.id}
-                className="rounded-xl bg-gradient-to-r from-primary-50/50 to-accent-50/50 dark:from-slate-800/50 dark:to-slate-700/50 p-3 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
-              >
-                <div className="text-xs text-slate-500 dark:text-slate-400">
-                  Parent #{m.parentId} • {m.createdAt ? new Date(m.createdAt).toLocaleString() : '—'}
-                </div>
-                <div className="mt-1 text-sm text-slate-700 dark:text-slate-200">{m.message}</div>
-              </div>
-            ))}
-          </div>
-        )}
+{items.length === 0 ? (
+           <div className="text-sm text-slate-600 dark:text-slate-400">No messages.</div>
+         ) : (
+           <div className="space-y-3">
+             {[...items].reverse().map((m) => (
+               <div
+                 key={m.id}
+                 className="rounded-xl bg-gradient-to-r from-primary-50/50 to-accent-50/50 dark:from-slate-800/50 dark:to-slate-700/50 p-3 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
+               >
+                 <div className="text-xs text-slate-500 dark:text-slate-400">
+                   {m.studentName ? `${m.studentName}` : `Student #${m.studentId}`} • {m.createdAt ? new Date(m.createdAt).toLocaleString() : '—'}
+                 </div>
+                 <div className="mt-1 text-sm text-slate-700 dark:text-slate-200">{m.message}</div>
+               </div>
+             ))}
+           </div>
+         )}
       </div>
     </div>
   );

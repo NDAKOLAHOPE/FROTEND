@@ -82,10 +82,13 @@ export default function PageShell({ children }) {
                 >
                   ☰
                 </Button>
-                <div>
-                  <div className="text-base font-bold text-slate-900 dark:text-white">School Management</div>
-                  <div className="text-xs text-slate-500 dark:text-slate-400">Professional Learning Dashboard</div>
-                </div>
+                <button
+                  onClick={() => window.location.href = '/'}
+                  className="text-base font-bold text-slate-900 dark:text-white hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                >
+                  School Management
+                </button>
+                <div className="text-xs text-slate-500 dark:text-slate-400">Professional Learning Dashboard</div>
               </div>
 
               <div className="flex items-center gap-3">

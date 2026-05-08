@@ -1,12 +1,15 @@
 import { NavLink } from 'react-router-dom';
 
 const linkBase = [
+  { to: '/', label: 'Home', icon: '🏠' },
   { to: '/dashboard', label: 'Dashboard', icon: '📊' },
   { to: '/students', label: 'Students', icon: '👥', roles: ['ADMIN', 'TEACHER', 'PARENT'] },
   { to: '/grades', label: 'Grades', icon: '📈', roles: ['ADMIN', 'TEACHER', 'PARENT'] },
   { to: '/payments', label: 'Payments', icon: '💳', roles: ['ADMIN', 'TEACHER', 'PARENT'] },
   { to: '/messages', label: 'Messages', icon: '💬', roles: ['ADMIN', 'TEACHER', 'PARENT'] },
   { to: '/notifications', label: 'Notifications', icon: '🔔', roles: ['ADMIN', 'TEACHER', 'PARENT'] },
+  { to: '/users', label: 'Users', icon: '👤', roles: ['ADMIN'] },
+  { to: '/profile', label: 'Profile', icon: '👤' },
 ];
 
 export default function Sidebar({ role, onNavigate }) {

@@ -1,28 +1,30 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { AuthProvider, useAuth } from './auth/AuthContext.jsx';
+import { ToastProvider } from './components/ui/Toast.jsx';
+import { ConfirmProvider } from './components/ui/ConfirmDialog.jsx';
 import RequireAuth from './components/auth/RequireAuth.jsx';
 import PageShell from './components/layout/PageShell.jsx';
 
+import HomePage from './pages/HomePage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import DashboardPage from './pages/DashboardPage.jsx';
 import StudentsPage from './pages/StudentsPage.jsx';
+import UsersPage from './pages/UsersPage.jsx';
 import GradesPage from './pages/GradesPage.jsx';
 import PaymentsPage from './pages/PaymentsPage.jsx';
 import MessagesPage from './pages/MessagesPage.jsx';
 import NotificationsPage from './pages/NotificationsPage.jsx';
+import ProfilePage from './pages/ProfilePage.jsx';
 
 function AppRoutes() {
   const { isAuthenticated } = useAuth();
 
   return (
     <Routes>
-       <Route
+      <Route path="/" element={<HomePage />} />
+      <Route
         path="/login"
         element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <LoginPage />}
-      />
-      <Route
-        path="/"
-        element={<Navigate to={isAuthenticated ? '/dashboard' : '/login'} replace />}
       />
       <Route
         path="/dashboard"
@@ -40,6 +42,16 @@ function AppRoutes() {
           <RequireAuth>
             <PageShell>
               <StudentsPage />
+            </PageShell>
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/users"
+        element={
+          <RequireAuth>
+            <PageShell>
+              <UsersPage />
             </PageShell>
           </RequireAuth>
         }
@@ -84,6 +96,16 @@ function AppRoutes() {
           </RequireAuth>
         }
       />
+      <Route
+        path="/profile"
+        element={
+          <RequireAuth>
+            <PageShell>
+              <ProfilePage />
+            </PageShell>
+          </RequireAuth>
+        }
+      />
     </Routes>
   );
 }
@@ -91,9 +113,13 @@ function AppRoutes() {
 export default function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <AppRoutes />
-      </BrowserRouter>
+      <ToastProvider>
+        <ConfirmProvider>
+          <BrowserRouter>
+            <AppRoutes />
+          </BrowserRouter>
+        </ConfirmProvider>
+      </ToastProvider>
     </AuthProvider>
   );
 }

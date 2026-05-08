@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { http } from '../api/http.js';
 import { useAuth } from '../auth/AuthContext.jsx';
 import Button from '../components/ui/Button.jsx';
+import Select from '../components/ui/Select.jsx';
 
 export default function StudentsPage() {
   const { role } = useAuth();
@@ -18,6 +19,10 @@ export default function StudentsPage() {
     dob: '',
     className: '',
   });
+
+  const [parents, setParents] = useState([]);
+  const [assignParentStudentId, setAssignParentStudentId] = useState('');
+  const [assignParentParentId, setAssignParentParentId] = useState('');
 
   const [progressItems, setProgressItems] = useState([]);
   const [progressLoading, setProgressLoading] = useState(false);
@@ -79,7 +84,7 @@ export default function StudentsPage() {
       try {
         setProgressLoading(true);
         setProgressError(null);
-        if (alive) await reloadProgress();
+        await reloadProgress();
       } catch (e) {
         if (!alive) return;
         setProgressError(e?.response?.data?.message ?? e?.message ?? 'Erreur');
@@ -90,7 +95,43 @@ export default function StudentsPage() {
     return () => {
       alive = false;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [role, progressStudentId]);
+
+  useEffect(() => {
+    if (canManage) {
+      (async () => {
+        try {
+          const res = await http.get('/users');
+          setParents(
+            res.data.filter((u) => u.role === 'PARENT' || u.role === 'MERE' || u.role === 'mere' || u.role === 'parent'),
+          );
+        } catch {
+          // ignore
+        }
+      })();
+    }
+  }, [canManage]);
+
+  const submitAssignParent = async (e) => {
+    e.preventDefault();
+    setError(null);
+    if (!assignParentStudentId || !assignParentParentId) {
+      setError('Please select both a student and a parent');
+      return;
+    }
+    try {
+      await http.post(`/students/${assignParentStudentId}/parents`, {
+        parentId: Number(assignParentParentId),
+      });
+      setAssignParentStudentId('');
+      setAssignParentParentId('');
+      await reloadStudents();
+    } catch (e) {
+      const msg = e?.response?.data?.message ?? e?.response?.data?.error ?? e?.message ?? 'Error';
+      setError(typeof msg === 'string' ? msg : JSON.stringify(msg));
+    }
+  };
 
   const submitProgress = async () => {
     setProgressError(null);
@@ -222,23 +263,69 @@ export default function StudentsPage() {
             <Button type="submit">
               {editingStudentId ? 'Update student' : 'Create student'}
             </Button>
-            {editingStudentId && (
-              <Button
-                type="button"
-                variant="ghost"
-                onClick={() => {
-                  setEditingStudentId(null);
-                  setForm({ firstName: '', lastName: '', dob: '', className: '' });
-                }}
-              >
-                Cancel
-              </Button>
-            )}
-          </div>
-        </form>
-      )}
+{editingStudentId && (
+               <Button
+                 type="button"
+                 variant="ghost"
+                 onClick={() => {
+                   setEditingStudentId(null);
+                   setForm({ firstName: '', lastName: '', dob: '', className: '' });
+                 }}
+               >
+                 Cancel
+               </Button>
+             )}
+           </div>
+         </form>
+       )}
 
-      {error && <div className="text-rose-600 text-sm">{error}</div>}
+       {canManage && (
+         <form
+           onSubmit={submitAssignParent}
+           className="rounded-2xl bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl border border-white/30 dark:border-slate-700/30 p-5 transition-all duration-300 hover:shadow-xl"
+         >
+           <div className="text-sm font-semibold mb-4 text-slate-900 dark:text-white">Assign parent to student</div>
+           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<label className="block">
+                <span className="text-sm text-slate-700 dark:text-slate-200">Student</span>
+                <Select
+                  value={assignParentStudentId}
+                  onChange={(e) => setAssignParentStudentId(e.target.value)}
+                  disabled={students.length === 0}
+                >
+                  <option value="">Select a student</option>
+                  {students.map((s) => (
+                    <option key={s.id} value={String(s.id)}>
+                      {s.firstName} {s.lastName} (#{s.id})
+                    </option>
+                  ))}
+                </Select>
+              </label>
+              <label className="block">
+                <span className="text-sm text-slate-700 dark:text-slate-200">Parent</span>
+                <Select
+                  value={assignParentParentId}
+                  onChange={(e) => setAssignParentParentId(e.target.value)}
+                  disabled={parents.length === 0}
+                >
+                  <option value="">Select a parent</option>
+                  {parents.map((p) => (
+                    <option key={p.id} value={String(p.id)}>
+                      {p.email}
+                    </option>
+                  ))}
+                </Select>
+              </label>
+           </div>
+           <div className="mt-5">
+             <Button type="submit" disabled={!assignParentStudentId || !assignParentParentId}>
+               Assign parent
+             </Button>
+           </div>
+         </form>
+       )}
+
+       {error && <div className="text-rose-600 text-sm">{error}</div>}
 
       {loading ? (
         <div className="text-sm text-slate-600 dark:text-slate-300">Loading...</div>
