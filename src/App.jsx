@@ -10,6 +10,10 @@ import LoginPage from './pages/LoginPage.jsx';
 import DashboardPage from './pages/DashboardPage.jsx';
 import StudentsPage from './pages/StudentsPage.jsx';
 import UsersPage from './pages/UsersPage.jsx';
+import EnrollmentsPage from './pages/EnrollmentsPage.jsx';
+import AttendancePage from './pages/AttendancePage.jsx';
+import ExamsPage from './pages/ExamsPage.jsx';
+import ReportCardsPage from './pages/ReportCardsPage.jsx';
 import GradesPage from './pages/GradesPage.jsx';
 import PaymentsPage from './pages/PaymentsPage.jsx';
 import MessagesPage from './pages/MessagesPage.jsx';
@@ -47,11 +51,41 @@ function AppRoutes() {
         }
       />
       <Route
-        path="/users"
+        path="/enrollments"
         element={
           <RequireAuth>
             <PageShell>
-              <UsersPage />
+              <EnrollmentsPage />
+            </PageShell>
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/attendance"
+        element={
+          <RequireAuth>
+            <PageShell>
+              <AttendancePage />
+            </PageShell>
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/exams"
+        element={
+          <RequireAuth>
+            <PageShell>
+              <ExamsPage />
+            </PageShell>
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/report-cards"
+        element={
+          <RequireAuth>
+            <PageShell>
+              <ReportCardsPage />
             </PageShell>
           </RequireAuth>
         }
@@ -92,6 +126,16 @@ function AppRoutes() {
           <RequireAuth>
             <PageShell>
               <NotificationsPage />
+            </PageShell>
+          </RequireAuth>
+        }
+      />
+      <Route
+        path="/users"
+        element={
+          <RequireAuth>
+            <PageShell>
+              <UsersPage />
             </PageShell>
           </RequireAuth>
         }
